@@ -9,15 +9,15 @@
   "test": {
     "username": "postgres",
     "password": "postgres",
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "database": "api_ecommerce",
+    "host": "localhost",
+    "dialect": "postgres"
   },
   "production": {
     "username": "postgres",
     "password": "postgres",
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "database": "api_ecommerce",
+    "host": "localhost",
+    "dialect": "postgres"
   }
 }

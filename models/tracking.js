@@ -15,7 +15,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   Tracking.init({
     order_id: DataTypes.INTEGER,
-    status: DataTypes.ENUM,
+    status: {
+      type: DataTypes.ENUM('in_preparation', 'shipped', 'in_transit', 'out_for_delivery', 'delivered')
+    },
     carrier: DataTypes.STRING,
     tracking_code: DataTypes.STRING,
     estimated_delivery: DataTypes.DATE,
