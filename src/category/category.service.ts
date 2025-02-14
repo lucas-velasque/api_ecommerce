@@ -5,22 +5,43 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 @Injectable()
 export class CategoryService {
   create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+    const newCategory = {
+      ...createCategoryDto,
+      id: this.category.length + 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    this.category.push(newService)
+    return newCategory;
   }
 
   findAll() {
-    return `This action returns all category`;
+    return this.category;
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} category`;
+    return this.category.find(category => adress.id == id);
   }
 
   update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+    const index = this.category.findIndex(category => category.id === id );
+    if (index >= 0){
+      this.category[index] = {
+        ...this.category[index],
+        ...updateCategoryDto,
+        updateAt: new Date()
+      };
+    return this.category[index];
   }
+  return null;
 
   remove(id: number) {
-    return `This action removes a #${id} category`;
+    const index = this.category.findIndex(category => category.id === id);
+    if (index >= 0) {
+      const removed = this.addresses[index];
+      this.addresses.splice(index, 1);
+      return removed;
+    }
+    return null;
   }
 }
