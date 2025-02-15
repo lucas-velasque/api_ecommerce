@@ -4,6 +4,16 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
+  private category = [
+    {
+      id: 1,
+      name: 'Eletrônicos',
+      description: 'Categoria para produtos eletrônicos',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+  ];
+
   create(createCategoryDto: CreateCategoryDto) {
     const newCategory = {
       ...createCategoryDto,
@@ -11,7 +21,7 @@ export class CategoryService {
       createdAt: new Date(),
       updatedAt: new Date()
     };
-    this.category.push(newService)
+    this.category.push(newCategory)
     return newCategory;
   }
 
@@ -20,7 +30,7 @@ export class CategoryService {
   }
 
   findOne(id: number) {
-    return this.category.find(category => adress.id == id);
+    return this.category.find(category => category.id == id);
   }
 
   update(id: number, updateCategoryDto: UpdateCategoryDto) {
@@ -29,17 +39,18 @@ export class CategoryService {
       this.category[index] = {
         ...this.category[index],
         ...updateCategoryDto,
-        updateAt: new Date()
+        updatedAt: new Date()
       };
-    return this.category[index];
+      return this.category[index];
+    }
+    return null;
   }
-  return null;
 
   remove(id: number) {
     const index = this.category.findIndex(category => category.id === id);
     if (index >= 0) {
-      const removed = this.addresses[index];
-      this.addresses.splice(index, 1);
+      const removed = this.category[index];
+      this.category.splice(index, 1);
       return removed;
     }
     return null;

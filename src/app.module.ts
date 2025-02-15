@@ -10,7 +10,6 @@ import { OrderitemModule } from './orderitem/orderitem.module';
 import { ProductModule } from './product/product.module';
 import { ReviewModule } from './review/review.module';
 import { TrackingModule } from './tracking/tracking.module';
-import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [

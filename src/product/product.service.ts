@@ -1,26 +1,45 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
+import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  constructor(
+    @InjectModel(Product)
+    private readonly productModel: typeof Product,
+  ) {}
+
+  async create(createProductDto: CreateProductDto): Promise<Product> {
+    return this.productModel.create({
+      ...createProductDto,
+      category_id: createProductDto.categoryId
+    });
   }
 
-  findAll() {
-    return `This action returns all product`;
+  async findAll(): Promise<Product[]> {
+    return this.productModel.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number): Promise<Product | null> {
+    return this.productModel.findByPk(id);
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto): Promise<Product | null> {
+    const product = await this.findOne(id);
+    if (product) {
+      return product.update(updateProductDto);
+    }
+    return null;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number): Promise<boolean> {
+    const product = await this.findOne(id);
+    if (product) {
+      await product.destroy();
+      return true;
+    }
+    return false;
   }
 }

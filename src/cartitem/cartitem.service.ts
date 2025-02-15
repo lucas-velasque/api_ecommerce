@@ -1,26 +1,45 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { CreateCartitemDto } from './dto/create-cartitem.dto';
 import { UpdateCartitemDto } from './dto/update-cartitem.dto';
+import { Cartitem } from './entities/cartitem.entity';
 
 @Injectable()
 export class CartitemService {
-  create(createCartitemDto: CreateCartitemDto) {
-    return 'This action adds a new cartitem';
+  constructor(
+    @InjectModel(Cartitem)
+    private readonly cartitemModel: typeof Cartitem,
+  ) {}
+
+  async create(createCartitemDto: CreateCartitemDto) {
+    // Corrigir o método create
+    return this.cartitemModel.create({
+      ...createCartitemDto
+    });
   }
 
-  findAll() {
-    return `This action returns all cartitem`;
+  async findAll(): Promise<Cartitem[]> {
+    return this.cartitemModel.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} cartitem`;
+  async findOne(id: number): Promise<Cartitem| null> {
+    return this.cartitemModel.findByPk(id);
   }
 
-  update(id: number, updateCartitemDto: UpdateCartitemDto) {
-    return `This action updates a #${id} cartitem`;
+  async update(id: number, updateProductDto: UpdateCartitemDto): Promise<Cartitem | null> {
+    const product = await this.findOne(id);
+    if (product) {
+      return product.update(updateProductDto);
+    }
+    return null;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cartitem`;
+  async remove(id: number): Promise<boolean> {
+    const product = await this.findOne(id);
+    if (product) {
+      await product.destroy();
+      return true;
+    }
+    return false;
   }
 }
