@@ -17,5 +17,5 @@ export class CreateProductDto {
   stock: number;
 
   @IsNumber()
-  categoryId: number;
+  category_id: number; // Alterado para corresponder ao nome da coluna
 }

@@ -18,23 +18,28 @@ export class Product extends Model {
   name: string;
 
   @Column({
-    type: DataType.TEXT
+    type: DataType.TEXT,
+    allowNull: true
   })
   description: string;
 
   @Column({
-    type: DataType.DECIMAL(10,2)
+    type: DataType.DECIMAL(10,2),
+    allowNull: false
   })
   price: number;
 
   @Column({
-    type: DataType.INTEGER
+    type: DataType.INTEGER,
+    allowNull: false,
+    defaultValue: 0
   })
   stock: number;
 
   @Column({
     type: DataType.INTEGER,
-    field: 'category_id'
+    field: 'category_id',
+    allowNull: false
   })
-  categoryId: number;
+  category_id: number; // Alterado para corresponder ao nome da coluna no banco
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -12,34 +12,47 @@ export class ProductService {
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
-    return this.productModel.create({
-      ...createProductDto,
-      category_id: createProductDto.categoryId
-    });
+    try {
+      return await this.productModel.create({
+        ...createProductDto,
+      });
+    } catch (error) {
+      throw new BadRequestException('Não foi possível criar o produto');
+    }
   }
 
   async findAll(): Promise<Product[]> {
-    return this.productModel.findAll();
-  }
-
-  async findOne(id: number): Promise<Product | null> {
-    return this.productModel.findByPk(id);
-  }
-
-  async update(id: number, updateProductDto: UpdateProductDto): Promise<Product | null> {
-    const product = await this.findOne(id);
-    if (product) {
-      return product.update(updateProductDto);
+    try {
+      return await this.productModel.findAll();
+    } catch (error) {
+      throw new BadRequestException('Erro ao buscar produtos');
     }
-    return null;
   }
 
-  async remove(id: number): Promise<boolean> {
+  async findOne(id: number): Promise<Product> {
+    const product = await this.productModel.findByPk(id);
+    if (!product) {
+      throw new NotFoundException(`Produto com ID ${id} não encontrado`);
+    }
+    return product;
+  }
+
+  async update(id: number, updateProductDto: UpdateProductDto): Promise<Product> {
     const product = await this.findOne(id);
-    if (product) {
+    try {
+      await product.update(updateProductDto);
+      return await this.findOne(id);
+    } catch (error) {
+      throw new BadRequestException('Não foi possível atualizar o produto');
+    }
+  }
+
+  async remove(id: number): Promise<void> {
+    const product = await this.findOne(id);
+    try {
       await product.destroy();
-      return true;
+    } catch (error) {
+      throw new BadRequestException('Não foi possível remover o produto');
     }
-    return false;
   }
 }
